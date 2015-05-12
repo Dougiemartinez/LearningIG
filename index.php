@@ -5,9 +5,9 @@
 	//starts session
 	session_start();
 	//Make Constants using define
-	define('client_ID', '025e77c43f93484fb23e475d3530c15c');
-	define('client_Secret', '952be6ecb7d941f89de536e5fdd9d75e');
-	define('redirectURI', 'http://localhost/maxapi/index.php');
+	define('clientID', 'a9eeb01471f54b6ebf5829cd6bf521ee');
+	define('clientSecret', '3607ef7b33fb43419b910e82e2bb4260');
+	define('redirectURI', 'http://localhost/LearningIG/index.php');
 	define('ImageDirectory', 'pics/');
 ?>
 
@@ -25,12 +25,8 @@
 	<!-- Creating a login for people to go and give approval for our web app to access their Instagram Account
 		 After getting aprroval we are now going to have the information so that we can play with it.
 	 -->
-	<a href="https:api.instagram/oauth/authorize/?client_id= <?php echo client_ID; ?> &redirect_uri= <?php echo redirectURI; ?> &response_type=code">LOGIN</a>
+	<a href="https://api.instagram.com/oauth/authorize/?client_id=<?php echo clientID; ?>&redirect_uri=<?php echo redirectURI; ?>&response_type=code">Login to Instagram</a></li>
 	<script src="js/main.js"></script>
 </body>
 </html>
 
-CLIENT ID	ebd393ddcaba4500a056cfa0ce5b944d
-CLIENT SECRET	50f0ba8f32b0494588f35a13cdf7bd7b
-WEBSITE URL	http://localhost/instagrampage/index.php
-REDIRECT URI	http://localhost/instagrampage/index.php
