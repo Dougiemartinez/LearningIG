@@ -9,8 +9,6 @@
 	define('clientSecret', 'c35a94b5e3d64f0f9677b63c72a99532');
 	define('redirectURI', 'http://localhost/douglasAPI/index.php');
 	define('ImageDirectory', 'pics/');
-	if (isset($_GET['code'])) {
-		$code = ($_GET['code']);
 		$url = 'https://api.instagram.com/oauth/access_token';
 		$access_token_settings = array('client_id' => clientID,
 									   	'client_secret' => clientSecret,
@@ -27,9 +25,16 @@
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 		//verifies that the curl is really there
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		//stores above information
+		$result = curl_exec($curl);
+		curl_close();
+		//decodes information in $result
+		$results = json_decode($result, true);
+		//echoes the decoded information 
+		echo $results['user']['username'];
 	}
-	$result = curl_exec($curl);
-	curl_close();
+	else{
+	}
 ?>
 
 <!DOCTYPE html>
