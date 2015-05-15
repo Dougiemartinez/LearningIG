@@ -27,11 +27,12 @@
 	function getUserID($userName){
 		$url = 'https://api.instagram.com/users/search?q=' . $userName . '&client_id=' . clientID;
 		$instagramInfo=connectToInstagram($url);
-		echo $results['data']['0']['id'];
+		$results = json_decode($instagramInfo, true);
+		return $results['data']['0']['id'];
 	}
 	//prints images onto screen
 	function printImages($userID){
-		$url = 'https://api.instagram.com/v1/users/' . $userID . '/media/recent?client_id=' . clientID . '&count=5';
+		$url = 'https://api.instagram.com/vl/users/' . $userID . '/media/recent?client_id=' . clientID . '&count=5';
 		$instagramInfo = connectToInstagram($url);
 		$results = json_decode($instagramInfo, true);
 		//parse through the info
@@ -76,18 +77,18 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="utf-8">
+		<!-- <meta charset="utf-8">
 		<meta name="description" content="">
-		<meta name="viewport" content="width098, intitial-scale = 1">
+		<meta name="viewport" content="width098, intitial-scale = 1"> -->
 		<title>InstApi</title>
-		<meta rel="stylesheet" href="css/style.css">
-		<meta rel="author" href="humans.txt">
+		<!-- <meta rel="stylesheet" href="css/style.css">
+		<meta rel="author" href="humans.txt"> -->
 	</head>
 	<body>
 		<!-- Creating a login for people to go and give approval for our web app to access their Instagram Account
 			 After getting aprroval we are now going to have the information so that we can play with it.
 		 -->
 		<div><a href="https://api.instagram.com/oauth/authorize/?client_id=<?php echo clientID; ?>&redirect_uri=<?php echo redirectURI; ?>&response_type=code">Login</a></div>
-		<script src="js/main.js"></script>
+		<!-- <script src="js/main.js"></script> -->
 	</body>
 </html>
