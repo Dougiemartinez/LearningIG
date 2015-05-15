@@ -25,25 +25,37 @@
 	}
 	//gets user id
 	function getUserID($userName){
-		$url = 'https://api.instagram.com/users/search?q=' . $userName . '&client_id=' . clientID;
-		$instagramInfo=connectToInstagram($url);
+		$url = 'https://api.instagram.com/v1/users/search?q=' . $userName . '&client_id=' . clientID;
+		$instagramInfo = connectToInstagram($url);
 		$results = json_decode($instagramInfo, true);
-		return $results['data']['0']['id'];
+		return $results['data'][0]['id'];
 	}
 	//prints images onto screen
 	function printImages($userID){
-		$url = 'https://api.instagram.com/vl/users/' . $userID . '/media/recent?client_id=' . clientID . '&count=5';
+		$url = 'https://api.instagram.com/v1/users/' . $userID . '/media/recent?client_id=' . clientID . '&count=5';
 		$instagramInfo = connectToInstagram($url);
 		$results = json_decode($instagramInfo, true);
 		//parse through the info
 		foreach ($results['data'] as $items) {
 			//gives url for each picture in results
 			$image_url = $items['images']['low_resolution']['url'];
-			echo '<img src="' . $image_url . '"/><br/>';
+			echo '<img src="' . $image_url . '"/><br>';
+			//saves $img_url
+			savePictures($image_url);
 		}
 	}
+	function savePictures($image_url){
+		echo $image_url . '<br>';
+		//using php to store the emage uro in the variable $filename
+		$filename = basename($image_url);
+		echo $filename . '<br>';
+		//makes sure that the image isnt stored in the server
+		$destination = ImageDirectory . $filename;
+		//stores image file into server
+		file_put_contents($destination, file_get_contents($image_url));
+	}
 	if (isset($_GET['code'])) {
-		$code = ($_GET['code']);
+		$code = $_GET['code'];
 		$url = 'https://api.instagram.com/oauth/access_token';
 		$access_token_settings = array('client_id' => clientID,
 									   	'client_secret' => clientSecret,
@@ -88,7 +100,7 @@
 		<!-- Creating a login for people to go and give approval for our web app to access their Instagram Account
 			 After getting aprroval we are now going to have the information so that we can play with it.
 		 -->
-		<div><a href="https://api.instagram.com/oauth/authorize/?client_id=<?php echo clientID; ?>&redirect_uri=<?php echo redirectURI; ?>&response_type=code">Login</a></div>
+		<div><a href="https://api.instagram.com/oauth/authorize/?client_id=<?php echo clientID; ?>&redirect_uri=<?php echo redirectURI; ?>&response_type=code">LOGIN</a></div>
 		<!-- <script src="js/main.js"></script> -->
 	</body>
 </html>
