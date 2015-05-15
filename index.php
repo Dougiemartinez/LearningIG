@@ -12,22 +12,34 @@
 	//connects to instagram
 	function connectToInstagram($url){
 		$ch = curl_init();
-		curl_setopt_array($ch, array{
+		curl_setopt_array($ch, array(
 			CURLOPT_URL => $url,
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_SSL_VERIFYPEER => false,
 			CURLOPT_SSL_VERIFYHOST => 2,
-		)};
+		));
 		$result = curl_exec($ch);
 		//closes curl handler
 		curl_close($ch);
 		return $result;
 	}
 	//gets user id
-	function getUserId($ch){
-		$url = 'http://api.instagram.com/users/search?q=' . $suerName . '&client_id=' . clientID;
+	function getUserID($userName){
+		$url = 'https://api.instagram.com/users/search?q=' . $userName . '&client_id=' . clientID;
 		$instagramInfo=connectToInstagram($url);
 		echo $results['data']['0']['id'];
+	}
+	//prints images onto screen
+	function printImages($userID){
+		$url = 'https://api.instagram.com/v1/users/' . $userID . '/media/recent?client_id=' . clientID . '&count=5';
+		$instagramInfo = connectToInstagram($url);
+		$results = json_decode($instagramInfo, true);
+		//parse through the info
+		foreach ($results['data'] as $items) {
+			//gives url for each picture in results
+			$image_url = $items['images']['low_resolution']['url'];
+			echo '<img src="' . $image_url . '"/><br/>';
+		}
 	}
 	if (isset($_GET['code'])) {
 		$code = ($_GET['code']);
@@ -49,11 +61,13 @@
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 		//stores above information
 		$result = curl_exec($curl);
-		curl_close();
+		curl_close($curl);
 		//decodes information in $result
 		$results = json_decode($result, true);
+		$userName = $results['user']['username'];
 		//echoes the decoded information 
-		getUserId($results['user']['username']);
+		$userID = getUserID($userName);
+		printImages($userID);
 	}
 	else{
 	}
@@ -62,18 +76,18 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<!-- <meta charset="utf-8">
+		<meta charset="utf-8">
 		<meta name="description" content="">
-		<meta name="viewport" content="width098, intitial-scale = 1"> -->
+		<meta name="viewport" content="width098, intitial-scale = 1">
 		<title>InstApi</title>
-		<!-- <meta rel="stylesheet" href="css/style.css">
-		<meta rel="author" href="humans.txt"> -->
+		<meta rel="stylesheet" href="css/style.css">
+		<meta rel="author" href="humans.txt">
 	</head>
 	<body>
 		<!-- Creating a login for people to go and give approval for our web app to access their Instagram Account
 			 After getting aprroval we are now going to have the information so that we can play with it.
 		 -->
-		<a href="https://api.instagram.com/oauth/authorize/?client_id = <?php echo clientID; ?> & redirect_uri = <?php echo redirectURI; ?> & response_type=code">LOGIN</a>
+		<div><a href="https://api.instagram.com/oauth/authorize/?client_id=<?php echo clientID; ?>&redirect_uri=<?php echo redirectURI; ?>&response_type=code">Login</a></div>
 		<script src="js/main.js"></script>
 	</body>
 </html>
