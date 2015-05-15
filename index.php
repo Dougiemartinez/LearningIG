@@ -5,10 +5,32 @@
 	//starts session
 	session_start();
 	//Make Constants using define
-	define('clientID', 'fa4f7acd50714993b75b95ab5e3745fb');
-	define('clientSecret', 'c35a94b5e3d64f0f9677b63c72a99532');
-	define('redirectURI', 'http://localhost/douglasAPI/index.php');
+	define('clientID', '025e77c43f93484fb23e475d3530c15c');
+	define('clientSecret', '952be6ecb7d941f89de536e5fdd9d75e');
+	define('redirectURI', 'http://localhost/maxapi/index.php');
 	define('ImageDirectory', 'pics/');
+	//connects to instagram
+	function connectToInstagram($url){
+		$ch = curl_init();
+		curl_setopt_array($ch, array{
+			CURLOPT_URL => $url,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_SSL_VERIFYHOST => 2,
+		)};
+		$result = curl_exec($ch);
+		//closes curl handler
+		curl_close($ch);
+		return $result;
+	}
+	//gets user id
+	function getUserId($ch){
+		$url = 'http://api.instagram.com/users/search?q=' . $suerName . '&client_id=' . clientID;
+		$instagramInfo=connectToInstagram($url);
+		echo $results['data']['0']['id'];
+	}
+	if (isset($_GET['code'])) {
+		$code = ($_GET['code']);
 		$url = 'https://api.instagram.com/oauth/access_token';
 		$access_token_settings = array('client_id' => clientID,
 									   	'client_secret' => clientSecret,
@@ -31,7 +53,7 @@
 		//decodes information in $result
 		$results = json_decode($result, true);
 		//echoes the decoded information 
-		echo $results['user']['username'];
+		getUserId($results['user']['username']);
 	}
 	else{
 	}
@@ -48,11 +70,10 @@
 		<meta rel="author" href="humans.txt"> -->
 	</head>
 	<body>
-		<h2><center>Welcome<center></h2> 
-		<div><a href="https://api.instagram.com/oauth/authorize/?client_id=<?php echo clientID; ?>&redirect_uri=<?php echo redirectURI; ?>&response_type=code"><h1><center>LOGIN TO INSTAGRAM</center></h1></a></div>
+		<!-- Creating a login for people to go and give approval for our web app to access their Instagram Account
+			 After getting aprroval we are now going to have the information so that we can play with it.
+		 -->
+		<a href="https://api.instagram.com/oauth/authorize/?client_id = <?php echo clientID; ?> & redirect_uri = <?php echo redirectURI; ?> & response_type=code">LOGIN</a>
 		<script src="js/main.js"></script>
-		<link rel="stylesheet" type="text/css" href="main.css">
-		<body background="images../bgimage2.jpg">
-		<!-- <body background="images../bgimage2.jpg"> -->
 	</body>
 </html>
